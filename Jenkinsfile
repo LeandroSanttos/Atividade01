@@ -1,19 +1,23 @@
 pipeline {
     agent any
     stages {
-        stage('Clonar repositório') {
+        stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/LeandroSanttos/Atividade01.git'
+                checkout scm
             }
         }
         stage('Build Docker') {
             steps {
-                sh 'docker build -t atividade-java .'
+                script {
+                    docker.build(atividade-java)
+                }
             }
         }
         stage('Executar aplicação') {
             steps {
-                sh 'docker run --rm atividade-java'
+                sh '''
+                docker run --rm -v $(pwd):/app -w /app atividade
+                '''
             }
         }
     }
